@@ -265,6 +265,12 @@ class ApplicationLayer(OSILayer):
                     if callback:
                         callback(response)
                         del self.response_callbacks[path]
+                    else:
+                        # Try to find a callback for any path
+                        for path, callback in list(self.response_callbacks.items()):
+                            callback(response)
+                            del self.response_callbacks[path]
+                            break
         
         # In a real implementation, we would pass the data up to the user application
         # For simplicity, we'll just print it

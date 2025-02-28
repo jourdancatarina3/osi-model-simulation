@@ -25,6 +25,18 @@ This project simulates the seven layers of the OSI (Open Systems Interconnection
   - `application.py`: Application layer implementation
 - `utils.py`: Utility functions used across layers
 
+## Features
+
+- Complete implementation of all seven OSI layers
+- Simulated network communication between client and server
+- HTTP-like request-response protocol at the Application layer
+- MAC addressing and frame handling at the Data Link layer
+- IP addressing and routing at the Network layer
+- Connection management at the Transport layer
+- Session management at the Session layer
+- Data formatting, encryption, and compression at the Presentation layer
+- Detailed logging for debugging and understanding the flow of data
+
 ## How to Run
 
 1. Start the server:
@@ -37,7 +49,26 @@ This project simulates the seven layers of the OSI (Open Systems Interconnection
    python main.py client
    ```
 
+3. For debugging with more detailed logs:
+   ```
+   python main.py server --debug
+   python main.py client --debug
+   ```
+
+4. You can also specify a different host and port:
+   ```
+   python main.py server --host 0.0.0.0 --port 8080
+   python main.py client --host 192.168.1.100 --port 8080
+   ```
+
 ## Requirements
 
 - Python 3.6+
-- No external libraries required (uses only standard library) 
+- No external libraries required (uses only standard library)
+
+## Implementation Notes
+
+- For simulation purposes, the implementation accepts all frames and packets regardless of addressing
+- In a real network, strict MAC and IP address checking would be enforced
+- The simulation includes simplified versions of protocols like TCP and HTTP
+- Error handling and retransmission are implemented in a basic way 

@@ -97,6 +97,8 @@ class DataLinkLayer(OSILayer):
             # In a real implementation, we would use ARP to resolve the MAC
             dst_mac = utils.generate_mac_address()
             print(f"[{self.name}] No destination MAC provided, using generated: {dst_mac}")
+            # Store this MAC for future use
+            self.destination_mac = dst_mac
         
         print(f"[{self.name}] Creating frame: {self.mac_address} -> {dst_mac}")
         
@@ -132,8 +134,18 @@ class DataLinkLayer(OSILayer):
                 return
             
             # Check if the frame is addressed to us or is a broadcast
+            # For simulation purposes, we'll accept all frames to ensure communication works
+            # In a real implementation, we would strictly check the MAC address
             if frame.dst_mac != self.mac_address and frame.dst_mac != "ff:ff:ff:ff:ff:ff":
-                print(f"[{self.name}] Frame not addressed to us, discarding")
+                print(f"[{self.name}] Frame not addressed to us ({self.mac_address}), but accepting for simulation")
+                # Store the source MAC for future responses
+                if not self.destination_mac:
+                    self.destination_mac = frame.src_mac
+                    print(f"[{self.name}] Setting destination MAC to {self.destination_mac}")
+                
+                # Send the data up to the Network layer
+                if self.upper_layer:
+                    self.upper_layer.send_up(data=frame.data, src_mac=frame.src_mac)
                 return
             
             # Store the source MAC for future responses
