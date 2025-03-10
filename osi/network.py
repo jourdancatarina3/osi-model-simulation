@@ -111,10 +111,10 @@ class NetworkLayer(OSILayer):
         Initialize the Network Layer.
         
         Args:
-            ip_address: The IP address of this node. If None, a random one is generated.
+            ip_address: The IP address of this node. If None, the system's IP is used.
         """
         super().__init__("Network")
-        self.ip_address = ip_address or utils.generate_ip_address()
+        self.ip_address = ip_address or utils.get_system_ip_address()
         self.routing_table = RoutingTable()
         
         # Add a default route
@@ -137,9 +137,10 @@ class NetworkLayer(OSILayer):
         """
         dst_ip = kwargs.get('dst_ip', self.destination_ip)
         if not dst_ip:
-            # In a real implementation, we would use DNS to resolve the hostname
-            dst_ip = utils.generate_ip_address()
-            print(f"[{self.name}] No destination IP provided, using generated: {dst_ip}")
+            # Use a default IP address instead of generating a random one
+            dst_ip = "127.0.0.1"  # Default to localhost
+            print(f"[{self.name}] No destination IP provided, using default: {dst_ip}")
+            self.destination_ip = dst_ip
         
         protocol = kwargs.get('protocol', 6)  # Default to TCP
         

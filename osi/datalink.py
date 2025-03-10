@@ -73,10 +73,10 @@ class DataLinkLayer(OSILayer):
         Initialize the Data Link Layer.
         
         Args:
-            mac_address: The MAC address of this node. If None, a random one is generated.
+            mac_address: The MAC address of this node. If None, the system's MAC is used.
         """
         super().__init__("Data Link")
-        self.mac_address = mac_address or utils.generate_mac_address()
+        self.mac_address = mac_address or utils.get_system_mac_address()
         # In a real implementation, we would have an ARP table to map IP to MAC
         self.destination_mac = None
     
@@ -94,9 +94,9 @@ class DataLinkLayer(OSILayer):
         """
         dst_mac = kwargs.get('dst_mac', self.destination_mac)
         if not dst_mac:
-            # In a real implementation, we would use ARP to resolve the MAC
-            dst_mac = utils.generate_mac_address()
-            print(f"[{self.name}] No destination MAC provided, using generated: {dst_mac}")
+            # Use the broadcast MAC address as default
+            dst_mac = "ff:ff:ff:ff:ff:ff"  # Broadcast address
+            print(f"[{self.name}] No destination MAC provided, using broadcast: {dst_mac}")
             # Store this MAC for future use
             self.destination_mac = dst_mac
         
